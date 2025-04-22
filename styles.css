@@ -11,35 +11,34 @@ body {
     font-family: "Special Gothic Expanded One", sans-serif;
     font-weight: 400;
     font-style: normal;
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
   }
   
   .screen { display: none; }
   .active { display: block; }
   
-  .buttonStyle {
+  .buttonStyle{
     all: unset;
     background-color: white;
-    padding: 10px;
+    padding: 10px 20px;
     box-shadow: 0px 3px 4px #d6d9ec;
-    height: 30px;
-    width: 30px;
-    border-radius: 60px;
+    border-radius: 100px;
     text-align: center;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    cursor: pointer;
   }
-  .buttonDownload{
+  .buttonDownload {
     all: unset;
     background-color: white;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 20px;
     box-shadow: 0px 3px 4px #d6d9ec;
     border-radius: 5px;
     text-align: center;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    cursor: pointer;
   }
-
-  .buttonDownload:hover{
-    background-color: rgb(174, 177, 213);
-    color: white;
-  }
-
+  
+  .buttonDownload:hover,
   .buttonStyle:hover {
     background-color: rgb(174, 177, 213);
     color: white;
@@ -51,6 +50,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 1rem;
   }
   
   .secondWindow {
@@ -59,16 +59,18 @@ body {
     justify-content: center;
     height: 100vh;
     width: 100vw;
+    padding: 1rem;
+    box-sizing: border-box;
   }
   
   .secondScreen {
     display: flex;
     flex-direction: column;
-    width: 90vw;
-    height: 90vh;
+    width: 100%;
+    height: 100%;
     max-width: 1920px;
     max-height: 1000px;
-    padding: 30px;
+    padding: 20px;
     backdrop-filter: blur(300px);
     border-radius: 20px;
     box-shadow: 0px 15px 20px #d6d9ec;
@@ -99,19 +101,20 @@ body {
     grid-template-rows: repeat(6, 1fr);
   }
   
-    .day {
+  .day {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
     font-family: "Special Gothic Expanded One", sans-serif;
     border-radius: 8px;
     background-color: rgb(238, 238, 244);
     box-shadow: inset 0px 3px 6px #a3a3a357;
     transition: all 0.2s ease;
   }
+  
   .day:hover {
     cursor: pointer;
   }
@@ -124,13 +127,15 @@ body {
   .calendar-header {
     text-align: center;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
   }
   
   .calendar-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .info-section {
@@ -138,14 +143,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .bottom-buttons {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
-    flex-shrink: 0;
   }
   
   .selectWindow {
@@ -159,11 +164,13 @@ body {
     text-align: center;
     text-align-last: center;
     color: rgb(174, 177, 213);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
   }
   
   .ItemSelectWindow {
-    width: 50%;
-    height: 50%;
+    width: 90%;
+    max-width: 500px;
+    height: auto;
     display: flex;
     backdrop-filter: blur(300px);
     border-radius: 20px;
@@ -171,6 +178,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
   }
   
   .options {
@@ -181,10 +190,10 @@ body {
     margin-bottom: 30px;
   }
   
-  .dateWindow{
+  .dateWindow {
     all: unset;
     padding: 10px 20px;
-    width: 150px;
+    min-width: 150px;
     margin: 10px 0;
     background-color: rgb(238, 238, 244);
     box-shadow: inset 0px 3px 6px #a3a3a357;
@@ -192,4 +201,27 @@ body {
     text-align: center;
     text-align-last: center;
     color: rgb(174, 177, 213);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
   }
+  
+  @media (max-width: 600px) {
+    .secondScreen {
+      padding: 15px;
+    }
+    .calendar-header-row,
+    .info-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .bottom-buttons {
+      width: 100%;
+      justify-content: center;
+    }
+    .selectWindow,
+    .buttonDownload,
+    .buttonStyle {
+      width: 100%;
+      font-size: 1rem;
+    }
+  }
+  
