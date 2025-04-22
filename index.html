@@ -2,53 +2,30 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">   
   <title>Month Planner</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    .screen { display: none; }
-    .active { display: block; }
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      margin-top: 20px;
-    }
-    .calendar-header {
-      font-weight: bold;
-      text-align: center;
-    }
-    .day {
-      padding: 10px;
-      text-align: center;
-      border: 1px solid #ccc;
-      cursor: pointer;
-    }
-    .red { background-color: #f88; }
-    .green { background-color: #8f8; }
-    select, button { margin: 5px 0; }
-    .calendar-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .bottom-buttons {
-      margin-top: 20px;
-      display: flex;
-      justify-content: flex-end;
-    }
-  </style>
 </head>
 <body>
   <div id="setupScreen" class="screen active">
-    <h2>Vyberte datum</h2>
-    <label>Rok: <select id="yearSelect"></select></label><br>
-    <label>Měsíc: <select id="monthSelect"></select></label><br>
-    <button onclick="generateCalendar()">Pokračovat</button>
+    <div class="firstScreen">
+        <div class="ItemSelectWindow">
+            <h2 class="header">Vyberte datum</h2>
+                <div class="options">
+            <select id="monthSelect" class="selectWindow"></select>
+            <select id="yearSelect" class="selectWindow"></select>
+            
+                </div>
+            <button onclick="generateCalendar()" class="buttonStyle">></button>
+        </div>
+    </div>
   </div>
 
   <div id="calendarScreen" class="screen">
     <div class="calendar-header-row">
-      <h2>Kalendář</h2>
+      <h2 class="header">Kalendář</h2>
       <h3 id="selectedDate" style="cursor: pointer; text-decoration: underline;"></h3>
     </div>
     <div class="calendar" id="calendarHeader"></div>
