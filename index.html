@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Interaktivní Kalendář</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .screen { display: none; }
+    .active { display: block; }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-top: 20px;
+    }
+    .calendar-header {
+      font-weight: bold;
+      text-align: center;
+    }
+    .day {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .red { background-color: #f88; }
+    .green { background-color: #8f8; }
+    select, button { margin: 5px 0; }
+    .calendar-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bottom-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+<body>
+  <div id="setupScreen" class="screen active">
+    <h2>Vyberte datum</h2>
+    <label>Rok: <select id="yearSelect"></select></label><br>
+    <label>Měsíc: <select id="monthSelect"></select></label><br>
+    <button onclick="generateCalendar()">Pokračovat</button>
+  </div>
+
+  <div id="calendarScreen" class="screen">
+    <div class="calendar-header-row">
+      <h2>Kalendář</h2>
+      <h3 id="selectedDate" style="cursor: pointer; text-decoration: underline;"></h3>
+    </div>
+    <div class="calendar" id="calendarHeader"></div>
+    <div id="calendar" class="calendar"></div>
+    <div style="margin-top: 20px">
+      <p>Pole1 (červené): <span id="redCount">0</span></p>
+      <p>Pole2 (zelené): <span id="greenCount">0</span></p>
+    </div>
+    <div class="bottom-buttons">
+      <button onclick="downloadScreenshot()">Uložit</button>
+    </div>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    const yearSelect = document.getElementById("yearSelect");
+    const monthSelect = document.getElementById("monthSelect");
+    const calendarDiv = document.getElementById("calendar");
+    const calendarHeader = document.getElementById("calendarHeader");
+    const redCountEl = document.getElementById("redCount");
+    const greenCountEl = document.getElementById("greenCount");
+    const selectedDateEl = document.getElementById("selectedDate");
+
+    const now = new Date();
+    const nextMonthDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const nextYear = nextMonthDate.getFullYear();
+    const nextMonth = nextMonthDate.getMonth();
+
+    // Naplnění let a měsíců
+    for (let y = nextYear - 10; y <= nextYear + 10; y++) {
+      const option = document.createElement("option");
+      option.value = y;
+      option.textContent = y;
+      if (y === nextYear) option.selected = true;
+      yearSelect.appendChild(option);
+    }
+
+    const months = ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"];
+    months.forEach((month, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = month;
+      if (index === nextMonth) option.selected = true;
+      monthSelect.appendChild(option);
+    });
+
+    const daysOfWeek = ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota", "Neděle"];
+
+    function generateCalendar() {
+      const year = parseInt(yearSelect.value);
+      const month = parseInt(monthSelect.value);
+
+      selectedDateEl.textContent = `${months[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      const startDay = (firstDay.getDay() + 6) % 7; // 0 = pondělí
+
+      document.getElementById("setupScreen").classList.remove("active");
+      document.getElementById("calendarScreen").classList.add("active");
+
+      calendarDiv.innerHTML = "";
+      calendarHeader.innerHTML = "";
+
+      let redCount = 0;
+      let greenCount = 0;
+
+      // Vygenerovat hlavičku kalendáře
+      daysOfWeek.forEach(day => {
+        const header = document.createElement("div");
+        header.classList.add("calendar-header");
+        header.textContent = day;
+        calendarHeader.appendChild(header);
+      });
+
+      // Prázdné dny před začátkem měsíce
+      for (let i = 0; i < startDay; i++) {
+        calendarDiv.appendChild(document.createElement("div"));
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const day = document.createElement("div");
+        day.classList.add("day");
+        day.textContent = d;
+
+        day.addEventListener("click", () => {
+          if (day.classList.contains("red")) {
+            day.classList.remove("red");
+            day.classList.add("green");
+            redCount--;
+            greenCount++;
+          } else if (day.classList.contains("green")) {
+            day.classList.remove("green");
+            greenCount--;
+          } else {
+            day.classList.add("red");
+            redCount++;
+          }
+          redCountEl.textContent = redCount;
+          greenCountEl.textContent = greenCount;
+        });
+
+        calendarDiv.appendChild(day);
+      }
+    }
+
+    selectedDateEl.addEventListener("click", () => {
+      document.getElementById("calendarScreen").classList.remove("active");
+      document.getElementById("setupScreen").classList.add("active");
+    });
+
+    function downloadScreenshot() {
+      html2canvas(document.getElementById("calendarScreen")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "kalendář.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
